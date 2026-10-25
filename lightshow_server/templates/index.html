@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Lights Control</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Christmas Lights Control</h1>
+
+    <button id="turn-on-btn">Turn On Lights</button>
+    <button id="turn-off-btn">Turn Off Lights</button>
+    <br>
+    <button id="push-update-btn">Push Update to Clients</button>
+    <br>
+    <p>Manual Color (Click to change)</p>
+    <input type="color" id="light-color" name="light-color" value="#ff0000">
+
+    <p id="status"></p>
+
+    <script>
+      function hexToRgb(hex) {
+
+        hex = hex.replace("#", "");
+
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return { r: r, g: g, b: b };
+      }
+
+        $(document).ready(function() {
+            // Turn on lights button click (with parameters)
+            $('#turn-on-btn').click(function() {
+
+                $.get("/lights-on", function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+
+            // Turn off lights button click
+            $('#turn-off-btn').click(function() {
+                $.get("/lights-off", function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+
+            $('#push-update-btn').click(function() {
+
+                $.get("/push-update", function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+
+            $('#light-color').on('input', function() {
+              const selectedColor = $(this).val();  // Get the selected hex color
+              console.log(`Color changed to: ${selectedColor}`);
+
+              // Convert the hex color to RGB
+              const rgb = hexToRgb(selectedColor);
+              console.log(`RGB Value: R(${rgb.r}), G(${rgb.g}), B(${rgb.b})`);
+
+              // Send the RGB values to the backend
+              $.get(`/update-color?r=${rgb.r}&g=${rgb.g}&b=${rgb.b}`, function(data) {
+                $('#status').text(data.message);  // Show the response from the server
+              });
+            });
+
+            //other
+            $('#other-on-btn').click(function() {
+                const color = $(this).data('color');  // Get the color parameter
+                const brightness = $(this).data('brightness');  // Get the brightness parameter
+
+                $.get(`/turn-on?color=${color}&brightness=${brightness}`, function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
