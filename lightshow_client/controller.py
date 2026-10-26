@@ -94,6 +94,7 @@ class Controller:
             b = int(255 - pos*3)
         return (g, r, b)
 
+    #I did not write this command, Mr. Eversole (a former teacher with experience with these LEDs) provided it to me
     def rainbow_cycle(self, args, frame):
         for i in range(self.NUM):
             pixel_index = (i * 256 // self.NUM) + ((frame + 1) % 255)
@@ -192,6 +193,7 @@ class Controller:
         self.pixels[pos2] = color2
     
     # intensity (20–80 recommended)
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def fire(self, args, frame):
         intensity = args.get('intensity', 50)
 
@@ -213,6 +215,7 @@ class Controller:
             self.pixels[i] = (g, r, b)
     
     #speed (1), size (5), color1, color 2
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def candy_cane(self, args, frame):
         speed = args.get('speed', 1)
         size = args.get('size', 5)
@@ -228,6 +231,7 @@ class Controller:
                     self.pixels[i] = color2
     
     #speed (10), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def star_glow(self, args, frame):
         speed = args.get('speed', 10)
         color = args.get('color', (255,0,0))
@@ -244,6 +248,7 @@ class Controller:
             self.pixels[i] = (g, r, b)
     
     #speed (4), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def snowfall(self, args, frame):
         speed = args.get('speed', 4)
         color = args.get('color', (255,255,0))
@@ -264,6 +269,7 @@ class Controller:
                 self.pixels[p] = color
     
     #speed (30), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def aurora(self, args, frame):
         speed = args.get('speed', 30)
         color = args.get('color', (0,255,0))
