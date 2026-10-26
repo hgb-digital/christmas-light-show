@@ -16,6 +16,8 @@ BTF-Lighting signal repeater - This repeater was specifically designed for ws281
 
 ALITOVE 12v PSU - This power supply is what allowed me to power my raspberry pi and lights. I plugged it into a simple AC wall outlet and it converted it to 12v DC. A 12V-to-Micro-USB converter powers the Pi, while the VCC (12V) and ground supply power directly to the signal repeater, which supplies power to the lights.
 
+YIPEN HEXHA DC 12v to 5v 3A Micro-USB adapter - Input connected to the 12v PSU and output connected to the Pi Zero.
+
 ## Development Process
 
 The first year, I used one Raspberry Pi (and signal amp and PSU) to power a singular Christmas tree which consisted of 3 strands, 100 LEDs a piece (6 runs of ws2811, 2 runs of ws2811 per strand). The program was built to power 100 LEDs then the signal was duplicated to all 3 strands. Using the Adafruit Neopixel library, the python program was able to individually assign each LED a value and update it 60 times a second. Using a loop, I designed a variety of functions that could flash the tree different colors, make a sparkle animation, and create a snake that could travel up and down the tree. 
