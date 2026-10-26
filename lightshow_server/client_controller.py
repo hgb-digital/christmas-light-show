@@ -15,17 +15,17 @@ class Controller:
 
         self.time = time.perf_counter()
 
-        self.running = False
-
+        self.running = True
+    
     #data = (command, {arg: value, ...})
     def run_command(self, data):
         self.program = data
         self.frame = 0
-
+    
     def stop(self):
         self.running = False
         self.pixels.fill((0, 0, 0))
-        self.pixels.show()
+        self.pixels.show()  
 
     def run(self):
         while self.running:
@@ -35,9 +35,9 @@ class Controller:
                 call(self.program[1], self.frame)
                 self.pixels.show()
                 self.frame += 1
-
+                
                 self.time = time.perf_counter()
-
+    
     #//programs
     #color
     def fill(self, args, frame):
@@ -45,7 +45,7 @@ class Controller:
         color = args.get('color', (0,0,0))
 
         self.pixels.fill(color)
-
+    
     #start_point: 1 = top, -1 = bottom
     #length, start_point, middle, start (color), end, speedmod
     def trail(self, args, frame):
@@ -94,6 +94,7 @@ class Controller:
             b = int(255 - pos*3)
         return (g, r, b)
 
+    #I did not write this command, Mr. Eversole (a former teacher with experience with these LEDs) provided it to me
     def rainbow_cycle(self, args, frame):
         for i in range(self.NUM):
             pixel_index = (i * 256 // self.NUM) + ((frame + 1) % 255)
@@ -147,7 +148,7 @@ class Controller:
             else:
                 for pixel in range(round(self.NUM / 2)):
                     self.pixels[pixel + round(self.NUM / 2)] = color
-
+    
     # color, speed (1–10)
     def breathe(self, args, frame):
         color = args.get('color', (0,0,255))
@@ -162,7 +163,7 @@ class Controller:
         b = int(color[2] * brightness / 255)
 
         self.pixels.fill((g, r, b))
-
+        
     # color, speed
     def color_wipe(self, args, frame):
         color = args.get('color', (0,0,255))
@@ -176,7 +177,7 @@ class Controller:
         # fill from start up to index
         for i in range(index):
             self.pixels[i] = color
-
+    
     # color1, color2, speed
     def dual_chase(self, args, frame):
         color1 = args.get('color1', (0,0,255))
@@ -190,8 +191,9 @@ class Controller:
 
         self.pixels[pos1] = color1
         self.pixels[pos2] = color2
-
+    
     # intensity (20–80 recommended)
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def fire(self, args, frame):
         intensity = args.get('intensity', 50)
 
@@ -211,8 +213,9 @@ class Controller:
             b = int(self.pixels[i][2] * 0.7 + target_b * 0.3)
 
             self.pixels[i] = (g, r, b)
-
+    
     #speed (1), size (5), color1, color 2
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def candy_cane(self, args, frame):
         speed = args.get('speed', 1)
         size = args.get('size', 5)
@@ -226,8 +229,9 @@ class Controller:
                     self.pixels[i] = color1
                 else:
                     self.pixels[i] = color2
-
+    
     #speed (10), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def star_glow(self, args, frame):
         speed = args.get('speed', 10)
         color = args.get('color', (255,0,0))
@@ -242,8 +246,9 @@ class Controller:
             b = int(color[2] * bri / 255)
 
             self.pixels[i] = (g, r, b)
-
+    
     #speed (4), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def snowfall(self, args, frame):
         speed = args.get('speed', 4)
         color = args.get('color', (255,255,0))
@@ -262,8 +267,9 @@ class Controller:
                 p = t + random.randint(-2, 2)  # slight randomness
                 p = max(0, min(self.NUM - 1, p))
                 self.pixels[p] = color
-
+    
     #speed (30), color
+    # Claude mainly wrote this function, I simply adapted it to fit into my architecture.
     def aurora(self, args, frame):
         speed = args.get('speed', 30)
         color = args.get('color', (0,255,0))
