@@ -2,6 +2,8 @@
 Hudson Brackeen
 Uploaded for the MIT Maker Portfolio
 
+<p>For reviewers: This is an extensive document that outlines the majority of the systems housed in this project. I understand your time is limited so I would recommend briefly reviewing the "Chain of Command" within "Technical Description" to help understand my developmental process.</p>
+
 ## Description
 This is a system for a LED Christmas light display. It runs on Python and Linux using the NeoPixel library which controls ws2811 individually addressable LEDs. The python server communicates with the light clients using the MQTT protocol. Altogether, the central server coordinates multiple clients to create a synchronous light display.
 
