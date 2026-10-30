@@ -10,6 +10,8 @@ This is a system for a LED Christmas light display. It runs on Python and Linux 
 ## Hardware
 Non-standard hardware used
 
+<img width="1421" height="1895" alt="zone_diagram" src="https://github.com/user-attachments/assets/eb693356-62fb-4d30-948d-3f958b485ef5" />
+
 Raspberry Pi Zero - This was the microcomputer powering each light zone. They connect via Wi-Fi to receive commands from the central server. They were physically connected to the BTF-Lighting signal repeater using the GPIO pinout. 
 
 ALITOVE ws2811 individually addressable LEDs - These waterproof lights were what made the light show shine. They were connected to the BTF-Lighting Signal repeater which provided them with the data and power needed to drive them. 
@@ -30,7 +32,9 @@ Lastly, I hated having to change the client code in each zone every time I updat
 
 ## Technical Description
 ### Chain of Command
-The Linux server contains an array of commands, including arguments such as color, speed, duration, etc., that define the master program. Using the MQTT broker, the server creates a list of broadcast stations that each will send commands that are for a specific zone (e.g. ST for Side Trees, CT for Center tree). Each zone (Pi) will subscribe to the broadcast station they are assigned (the side trees will connect to the ST station) and receive scheduled commands. The physical code for the commands (fire, color wipe) is stored on each client, the server simply tells each zone which command to run and how (color, duration). The server also runs a Flask server that can interact with the master program, telling it to pause the program or send out a static color to each zone. 
+<img width="960" height="540" alt="zoom_out_diagram" src="https://github.com/user-attachments/assets/8bcb9c72-7b76-4c0a-9c60-4d1443ab482e" />
+
+The Linux server contains an array of commands, including arguments such as color, speed, duration, etc., that define the master program (see `lightshow_server/program.py`). Using the MQTT broker, the server creates a list of broadcast stations that each will send commands that are for a specific zone (e.g. ST for Side Trees, CT for Center tree). Each zone (Pi) will subscribe to the broadcast station they are assigned (the side trees will connect to the ST station) and receive scheduled commands. The physical code for the commands (fire, color wipe) is stored on each client (see `lightshow_client/controller`), the server simply tells each zone which command to run and how (color, duration). The server also runs a Flask server that can interact with the master program, telling it to pause the program or send out a static color to each zone. 
 
 ### GPIO Limits 
 As briefly noted in the development section, I had to add more computers to my show in order to run each zone. While it was technically possible to write LED programs to more than one GPIO at a time, I was having a hard time keeping the python program from crashing as the RAM filled up. Sending more than 1 program per computer was simply not reliable enough which is why I decided to buy more microcomputers and segregate the show into zones.
@@ -42,7 +46,7 @@ I have 1 continuous strand in the most-recent Christmas light display that conta
 As explained above, each client (Pi) contains the code for how to control the lights (the commands). The server simply sends a message of what command to run. When adding new commands, it becomes extremely tedious to login to each Pi via SSH and send over the updated client code. That's why I created a program to automate this process. Without rebooting any of the Pis, I can send a command via the server that tells each client to download the latest client code from the server. By unloading the client code, loading the new code, then reinitializing the command class, each client can update their commands autonomously. 
 
 ### What the lights do when it's not Christmas
-When it's not Christmas, I hang the lights up in my room and sync them with my PC RGB lights. Using the light server's Flask server, I can run a command on my PC that can both update my PC LEDs and the lights strung up in my room simultaneously. 
+When it's not Christmas, I hang the lights up in my room and sync them with my PC RGB lights. Using the light server's Flask server (see `lightshow_server/webpage.py`), I can run a command on my PC that can both update my PC LEDs and the lights strung up in my room simultaneously. 
 
 
 
